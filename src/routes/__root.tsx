@@ -10,6 +10,7 @@ import {
 
 import appCss from "../styles.css?url";
 import { RoleProvider } from "@/lib/role-context";
+import { ThemeProvider } from "@/lib/theme-context";
 import { Navbar, Footer } from "@/components/layout/Navbar";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -87,14 +88,16 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
-      <RoleProvider>
-        <div className="flex min-h-screen flex-col">
-          <Navbar />
-          <main className="flex-1"><Outlet /></main>
-          <Footer />
-        </div>
-        <Toaster />
-      </RoleProvider>
+      <ThemeProvider>
+        <RoleProvider>
+          <div className="flex min-h-screen flex-col">
+            <Navbar />
+            <main className="flex-1"><Outlet /></main>
+            <Footer />
+          </div>
+          <Toaster />
+        </RoleProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
