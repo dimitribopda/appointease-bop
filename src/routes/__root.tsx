@@ -10,7 +10,6 @@ import {
 
 import appCss from "../styles.css?url";
 import { RoleProvider } from "@/lib/role-context";
-import { ThemeProvider } from "@/lib/theme-context";
 import { Navbar, Footer } from "@/components/layout/Navbar";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -60,9 +59,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "AppointEase — Réservez en ligne à Yaoundé & Douala" },
       { name: "description", content: "AppointEase : la plateforme camerounaise de réservation de rendez-vous en ligne pour coiffeurs, dentistes, mécaniciens et plus." },
-      { property: "og:title", content: "AppointEase" },
-      { property: "og:description", content: "Réservez vos rendez-vous en ligne au Cameroun." },
+      { property: "og:title", content: "AppointEase — Réservez en ligne à Yaoundé & Douala" },
+      { property: "og:description", content: "AppointEase : la plateforme camerounaise de réservation de rendez-vous en ligne pour coiffeurs, dentistes, mécaniciens et plus." },
       { property: "og:type", content: "website" },
+      { name: "twitter:title", content: "AppointEase — Réservez en ligne à Yaoundé & Douala" },
+      { name: "twitter:description", content: "AppointEase : la plateforme camerounaise de réservation de rendez-vous en ligne pour coiffeurs, dentistes, mécaniciens et plus." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f55abfcf-8154-4b72-a87e-eb3862b316e3/id-preview-6d83b8da--81ddfbf1-8773-4e1b-806b-0796ab096331.lovable.app-1780009899954.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f55abfcf-8154-4b72-a87e-eb3862b316e3/id-preview-6d83b8da--81ddfbf1-8773-4e1b-806b-0796ab096331.lovable.app-1780009899954.png" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),
@@ -88,16 +92,14 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <RoleProvider>
-          <div className="flex min-h-screen flex-col">
-            <Navbar />
-            <main className="flex-1"><Outlet /></main>
-            <Footer />
-          </div>
-          <Toaster />
-        </RoleProvider>
-      </ThemeProvider>
+      <RoleProvider>
+        <div className="flex min-h-screen flex-col">
+          <Navbar />
+          <main className="flex-1"><Outlet /></main>
+          <Footer />
+        </div>
+        <Toaster />
+      </RoleProvider>
     </QueryClientProvider>
   );
 }
