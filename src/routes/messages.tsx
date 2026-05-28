@@ -85,9 +85,9 @@ function MessagesPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
-      <div className="grid h-[calc(100vh-10rem)] overflow-hidden rounded-3xl border border-border bg-card md:grid-cols-[320px_1fr]">
+      <div className="grid h-[calc(100vh-10rem)] overflow-hidden rounded-3xl border border-white/20 bg-white/40 shadow-soft backdrop-blur-lg dark:border-white/10 dark:bg-black/40 md:grid-cols-[320px_1fr]">
         {/* Conv list */}
-        <aside className="overflow-y-auto border-b border-border md:border-b-0 md:border-r">
+        <aside className="overflow-y-auto border-b border-white/20 bg-white/30 backdrop-blur-md dark:border-white/10 dark:bg-black/30 md:border-b-0 md:border-r">
           <div className="border-b border-border p-4">
             <h2 className="text-lg font-bold">Messagerie</h2>
             <p className="text-xs text-muted-foreground">Discussions et assistant IA</p>
@@ -132,12 +132,12 @@ function MessagesPage() {
           <div ref={scrollRef} className="flex-1 space-y-3 overflow-y-auto bg-gradient-brand-soft/30 p-4">
             {active.messages.map((m) => (
               <div key={m.id} className={`flex ${m.from === "me" ? "justify-end" : "justify-start"}`}>
-                <div className={`max-w-[78%] rounded-2xl px-4 py-2 text-sm shadow-soft ${
+                <div className={`max-w-[78%] rounded-2xl px-4 py-2 text-sm shadow-soft backdrop-blur-md ${
                   m.from === "me"
                     ? "rounded-br-sm bg-gradient-brand text-primary-foreground"
                     : m.from === "ai"
-                    ? "rounded-bl-sm border border-primary/20 bg-card"
-                    : "rounded-bl-sm bg-card"
+                    ? "rounded-bl-sm border border-primary/30 bg-white/60 dark:bg-black/50"
+                    : "rounded-bl-sm border border-white/30 bg-white/60 dark:border-white/10 dark:bg-black/50"
                 }`}>
                   {m.from === "ai" && (
                     <div className="mb-1 flex items-center gap-1 text-xs font-semibold text-primary"><Sparkles className="h-3 w-3" /> Gemini</div>

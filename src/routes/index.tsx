@@ -129,7 +129,7 @@ function Home() {
               key={p.id}
               to="/provider/$id"
               params={{ id: p.id }}
-              className="group overflow-hidden rounded-2xl border border-border bg-card transition hover:-translate-y-0.5 hover:shadow-brand"
+              className="group overflow-hidden rounded-2xl border border-white/20 bg-white/40 backdrop-blur-md transition hover:-translate-y-0.5 hover:shadow-brand dark:border-white/10 dark:bg-black/40"
             >
               <div className="aspect-[4/3] overflow-hidden bg-muted">
                 <img src={p.image} alt={p.name} className="h-full w-full object-cover transition group-hover:scale-105" />
