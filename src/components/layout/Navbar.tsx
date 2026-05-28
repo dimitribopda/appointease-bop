@@ -40,8 +40,17 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
+          {/* Theme toggle */}
+          <button
+            onClick={toggle}
+            aria-label="Basculer le thème"
+            className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-white/40 backdrop-blur-md transition hover:bg-white/60 dark:border-white/10 dark:bg-black/40 dark:hover:bg-black/60"
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4 text-brand-orange" /> : <Moon className="h-4 w-4" />}
+          </button>
+
           {/* Persistent role switcher */}
-          <div className="hidden items-center rounded-full border border-border bg-card p-1 text-xs font-medium shadow-soft sm:flex">
+          <div className="hidden items-center rounded-full border border-white/20 bg-white/40 p-1 text-xs font-medium shadow-soft backdrop-blur-md dark:border-white/10 dark:bg-black/40 sm:flex">
             <button
               onClick={() => setRole("client")}
               className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 transition ${
