@@ -1,14 +1,16 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useRole } from "@/lib/role-context";
-import { Calendar, MessageSquare, Sparkles, User2, Briefcase } from "lucide-react";
+import { useTheme } from "@/lib/theme-context";
+import { Calendar, MessageSquare, Sparkles, User2, Briefcase, Moon, Sun } from "lucide-react";
 
 export function Navbar() {
   const { role, setRole } = useRole();
+  const { theme, toggle } = useTheme();
   const { location } = useRouterState();
   const isActive = (p: string) => location.pathname === p || (p !== "/" && location.pathname.startsWith(p));
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-white/20 bg-white/40 backdrop-blur-lg dark:border-white/10 dark:bg-black/40">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link to="/" className="flex items-center gap-2 font-semibold">
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-brand text-primary-foreground shadow-brand">
@@ -38,8 +40,17 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-2">
+          {/* Theme toggle */}
+          <button
+            onClick={toggle}
+            aria-label="Basculer le thème"
+            className="grid h-9 w-9 place-items-center rounded-full border border-white/20 bg-white/40 backdrop-blur-md transition hover:bg-white/60 dark:border-white/10 dark:bg-black/40 dark:hover:bg-black/60"
+          >
+            {theme === "dark" ? <Sun className="h-4 w-4 text-brand-orange" /> : <Moon className="h-4 w-4" />}
+          </button>
+
           {/* Persistent role switcher */}
-          <div className="hidden items-center rounded-full border border-border bg-card p-1 text-xs font-medium shadow-soft sm:flex">
+          <div className="hidden items-center rounded-full border border-white/20 bg-white/40 p-1 text-xs font-medium shadow-soft backdrop-blur-md dark:border-white/10 dark:bg-black/40 sm:flex">
             <button
               onClick={() => setRole("client")}
               className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 transition ${

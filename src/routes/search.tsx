@@ -96,7 +96,7 @@ function SearchPage() {
                 key={p.id}
                 to="/provider/$id"
                 params={{ id: p.id }}
-                className="group flex flex-col gap-4 rounded-2xl border border-border bg-card p-4 transition hover:-translate-y-0.5 hover:shadow-brand sm:flex-row"
+                className="group flex flex-col gap-4 rounded-2xl border border-white/20 bg-white/40 p-4 backdrop-blur-md transition hover:-translate-y-0.5 hover:shadow-brand dark:border-white/10 dark:bg-black/40 sm:flex-row"
               >
                 <div className="aspect-[4/3] w-full overflow-hidden rounded-xl bg-muted sm:h-32 sm:w-44 sm:shrink-0">
                   <img src={p.image} alt={p.name} className="h-full w-full object-cover transition group-hover:scale-105" />
