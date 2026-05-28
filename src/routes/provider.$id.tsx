@@ -141,12 +141,12 @@ function ProviderPage() {
             </div>
             <button
               disabled={!selectedSlot}
-              onClick={() => setShowPayment(true)}
+              onClick={() => setShowSuccess(true)}
               className="mt-4 w-full rounded-xl bg-gradient-brand py-3 text-sm font-semibold text-primary-foreground shadow-brand transition disabled:opacity-50"
             >
-              Confirmer & Payer
+              Confirmer la réservation
             </button>
-            <p className="mt-2 text-center text-xs text-muted-foreground">Paiement sécurisé via Mobile Money</p>
+            <p className="mt-2 text-center text-xs text-muted-foreground">Réservation gratuite · Vous payez sur place</p>
           </div>
         </aside>
       </div>
