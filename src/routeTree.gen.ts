@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as MessagesRouteImport } from './routes/messages'
@@ -20,6 +21,11 @@ import { Route as ProDashboardRouteImport } from './routes/pro.dashboard'
 import { Route as ProCalendarRouteImport } from './routes/pro.calendar'
 import { Route as ClientDashboardRouteImport } from './routes/client.dashboard'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SearchRoute = SearchRouteImport.update({
   id: '/search',
   path: '/search',
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/messages': typeof MessagesRoute
   '/pricing': typeof PricingRoute
   '/search': typeof SearchRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/client/dashboard': typeof ClientDashboardRoute
   '/pro/calendar': typeof ProCalendarRoute
   '/pro/dashboard': typeof ProDashboardRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/messages': typeof MessagesRoute
   '/pricing': typeof PricingRoute
   '/search': typeof SearchRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/client/dashboard': typeof ClientDashboardRoute
   '/pro/calendar': typeof ProCalendarRoute
   '/pro/dashboard': typeof ProDashboardRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/messages': typeof MessagesRoute
   '/pricing': typeof PricingRoute
   '/search': typeof SearchRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/client/dashboard': typeof ClientDashboardRoute
   '/pro/calendar': typeof ProCalendarRoute
   '/pro/dashboard': typeof ProDashboardRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/messages'
     | '/pricing'
     | '/search'
+    | '/sitemap.xml'
     | '/client/dashboard'
     | '/pro/calendar'
     | '/pro/dashboard'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/messages'
     | '/pricing'
     | '/search'
+    | '/sitemap.xml'
     | '/client/dashboard'
     | '/pro/calendar'
     | '/pro/dashboard'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/messages'
     | '/pricing'
     | '/search'
+    | '/sitemap.xml'
     | '/client/dashboard'
     | '/pro/calendar'
     | '/pro/dashboard'
@@ -153,6 +165,7 @@ export interface RootRouteChildren {
   MessagesRoute: typeof MessagesRoute
   PricingRoute: typeof PricingRoute
   SearchRoute: typeof SearchRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ClientDashboardRoute: typeof ClientDashboardRoute
   ProCalendarRoute: typeof ProCalendarRoute
   ProDashboardRoute: typeof ProDashboardRoute
@@ -162,6 +175,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/search': {
       id: '/search'
       path: '/search'
@@ -241,6 +261,7 @@ const rootRouteChildren: RootRouteChildren = {
   MessagesRoute: MessagesRoute,
   PricingRoute: PricingRoute,
   SearchRoute: SearchRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ClientDashboardRoute: ClientDashboardRoute,
   ProCalendarRoute: ProCalendarRoute,
   ProDashboardRoute: ProDashboardRoute,
@@ -250,3 +271,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
