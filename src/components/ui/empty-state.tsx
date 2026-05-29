@@ -25,7 +25,7 @@ export function EmptyState({
       <p className="mx-auto mt-2 max-w-sm text-sm text-muted-foreground">{description}</p>
       {ctaLabel && ctaTo && (
         <Link
-          to={ctaTo}
+          to={ctaTo as any}
           className="mt-5 inline-flex items-center justify-center rounded-full bg-gradient-brand px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-brand transition hover:opacity-95"
         >
           {ctaLabel}
