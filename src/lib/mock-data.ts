@@ -9,6 +9,7 @@ export type Provider = {
   priceFrom: number;
   image: string;
   description: string;
+  verified?: boolean;
   services: { id: string; name: string; duration: number; price: number }[];
 };
 
