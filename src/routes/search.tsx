@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CATEGORIES, NEIGHBORHOODS, PROVIDERS, formatFCFA } from "@/lib/mock-data";
-import { MapPin, Star, SlidersHorizontal } from "lucide-react";
-import { useMemo, useState } from "react";
+import { MapPin, Star, SlidersHorizontal, BadgeCheck, SearchX } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ProviderRowSkeleton } from "@/components/ui/provider-card-skeleton";
+import { EmptyState } from "@/components/ui/empty-state";
 
 type SearchParams = { q?: string; hood?: string; cat?: string };
 
@@ -19,6 +21,11 @@ function SearchPage() {
   const { q, hood, cat } = Route.useSearch();
   const [cat2, setCat2] = useState(cat || "");
   const [hood2, setHood2] = useState(hood || "");
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
   const [minRating, setMinRating] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000);
   const [query, setQuery] = useState(q || "");
