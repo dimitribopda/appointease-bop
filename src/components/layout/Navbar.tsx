@@ -36,6 +36,7 @@ export function Navbar() {
             </>
           )}
           <NavLink to="/messages" label="Messagerie" icon={<MessageSquare className="h-4 w-4" />} active={isActive("/messages")} />
+          <NavLink to="/ai-assistant" label="BOP IA" icon={<Sparkles className="h-4 w-4" />} active={isActive("/ai-assistant")} />
           <NavLink to="/pricing" label="Forfaits" active={isActive("/pricing")} />
         </nav>
 
