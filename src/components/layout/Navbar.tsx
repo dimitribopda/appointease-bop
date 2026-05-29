@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useRole } from "@/lib/role-context";
 import { useTheme } from "@/lib/theme-context";
-import { Home, Calendar, MessageSquare, Sparkles, User2, Briefcase, Moon, Sun } from "lucide-react";
+import { Home, Calendar, MessageSquare, Sparkles, User2, Briefcase, Moon, Sun, Bot } from "lucide-react";
 
 export function Navbar() {
   const { role, setRole } = useRole();
