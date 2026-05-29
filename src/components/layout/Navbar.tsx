@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useRole } from "@/lib/role-context";
 import { useTheme } from "@/lib/theme-context";
-import { Home, Calendar, MessageSquare, Sparkles, User2, Briefcase, Moon, Sun } from "lucide-react";
+import { Home, Calendar, MessageSquare, Sparkles, User2, Briefcase, Moon, Sun, Bot } from "lucide-react";
 
 export function Navbar() {
   const { role, setRole } = useRole();
@@ -36,6 +36,7 @@ export function Navbar() {
             </>
           )}
           <NavLink to="/messages" label="Messagerie" icon={<MessageSquare className="h-4 w-4" />} active={isActive("/messages")} />
+          <NavLink to="/ai-assistant" label="BOP IA" icon={<Sparkles className="h-4 w-4" />} active={isActive("/ai-assistant")} />
           <NavLink to="/pricing" label="Forfaits" active={isActive("/pricing")} />
         </nav>
 
@@ -90,6 +91,7 @@ export function Navbar() {
           active={isActive("/client/dashboard") || isActive("/pro/calendar") || isActive("/pro/dashboard")}
         />
         <TabLink to="/messages" label="Chat" icon={<MessageSquare className="h-5 w-5" />} active={isActive("/messages")} />
+        <TabLink to="/ai-assistant" label="BOP IA" icon={<Bot className="h-5 w-5" />} active={isActive("/ai-assistant")} />
         <TabLink to="/auth" label="Profil" icon={<User2 className="h-5 w-5" />} active={isActive("/auth")} />
       </nav>
     </header>
