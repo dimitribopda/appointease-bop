@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRole } from "@/lib/role-context";
-import { Send, Sparkles, Bot, Check, CheckCheck } from "lucide-react";
+import { Send, CheckCheck, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export const Route = createFileRoute("/messages")({
@@ -8,8 +8,8 @@ export const Route = createFileRoute("/messages")({
   component: MessagesPage,
 });
 
-type Msg = { id: number; from: "me" | "them" | "ai"; text: string; ts: string };
-type Conv = { id: string; name: string; avatar: string; isAI?: boolean; last: string; unread?: number; messages: Msg[] };
+type Msg = { id: number; from: "me" | "them"; text: string; ts: string };
+type Conv = { id: string; name: string; avatar: string; last: string; unread?: number; messages: Msg[] };
 
 const now = () => new Date().toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
 
@@ -17,16 +17,6 @@ function MessagesPage() {
   const { role } = useRole();
 
   const initial: Conv[] = [
-    {
-      id: "ai",
-      name: "AppointEase AI (Gemini)",
-      avatar: "✨",
-      isAI: true,
-      last: "Bonjour ! Comment puis-je vous aider aujourd'hui ?",
-      messages: [
-        { id: 1, from: "ai", text: role === "client" ? "Bonjour ! Je suis votre assistant AppointEase. Je peux vous aider à trouver un pro, résumer vos rendez-vous ou répondre à vos questions. Que cherchez-vous ?" : "Bonjour ! Je suis votre assistant pro. Je peux vous aider à rédiger des réponses, optimiser votre planning ou analyser vos performances. Que voulez-vous faire ?", ts: now() },
-      ],
-    },
     {
       id: "1",
       name: role === "client" ? "Salon Aminata" : "Aïssatou N.",
@@ -51,16 +41,15 @@ function MessagesPage() {
   ];
 
   const [convs, setConvs] = useState(initial);
-  const [activeId, setActiveId] = useState("ai");
+  const [activeId, setActiveId] = useState("1");
   const [input, setInput] = useState("");
-  const [aiTyping, setAiTyping] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const active = convs.find((c) => c.id === activeId)!;
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
-  }, [active?.messages.length, aiTyping]);
+  }, [active?.messages.length]);
 
   const smartReplies = role === "provider"
     ? ["Bonjour, oui c'est confirmé 😊", "Merci pour votre patience !", "Pouvez-vous me préciser ?"]
@@ -71,26 +60,31 @@ function MessagesPage() {
     const msg: Msg = { id: Date.now(), from: "me", text, ts: now() };
     setConvs((cs) => cs.map((c) => c.id === activeId ? { ...c, messages: [...c.messages, msg], last: text } : c));
     setInput("");
-
-    if (active.isAI) {
-      setAiTyping(true);
-      setTimeout(() => {
-        const reply = mockAIReply(text, role);
-        const ai: Msg = { id: Date.now() + 1, from: "ai", text: reply, ts: now() };
-        setConvs((cs) => cs.map((c) => c.id === activeId ? { ...c, messages: [...c.messages, ai], last: reply } : c));
-        setAiTyping(false);
-      }, 1400);
-    }
   };
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
-      <div className="grid h-[calc(100vh-10rem)] overflow-hidden rounded-3xl border border-white/20 bg-white/40 shadow-soft backdrop-blur-lg dark:border-white/10 dark:bg-black/40 md:grid-cols-[320px_1fr]">
+      {/* AI banner */}
+      <Link
+        to="/ai-assistant"
+        className="mb-4 flex items-center justify-between gap-3 rounded-2xl border border-white/20 bg-gradient-to-r from-[hsl(280_85%_55%/0.15)] to-[hsl(25_95%_55%/0.15)] p-3 backdrop-blur-md transition hover:scale-[1.01] dark:border-white/10"
+      >
+        <div className="flex items-center gap-3">
+          <span className="grid h-10 w-10 place-items-center rounded-full bg-gradient-to-br from-[hsl(280_85%_55%)] to-[hsl(25_95%_55%)] text-xs font-black text-white">BOP</span>
+          <div>
+            <div className="text-sm font-bold uppercase tracking-wide">APPOINTEASE by BOP</div>
+            <div className="text-xs text-muted-foreground">Votre assistant IA dédié · Espace séparé</div>
+          </div>
+        </div>
+        <Sparkles className="h-4 w-4 text-[hsl(280_85%_55%)]" />
+      </Link>
+
+      <div className="grid h-[calc(100vh-14rem)] overflow-hidden rounded-3xl border border-white/20 bg-white/40 shadow-soft backdrop-blur-lg dark:border-white/10 dark:bg-black/40 md:grid-cols-[320px_1fr]">
         {/* Conv list */}
         <aside className="overflow-y-auto border-b border-white/20 bg-white/30 backdrop-blur-md dark:border-white/10 dark:bg-black/30 md:border-b-0 md:border-r">
           <div className="border-b border-border p-4">
             <h2 className="text-lg font-bold">Messagerie</h2>
-            <p className="text-xs text-muted-foreground">Discussions et assistant IA</p>
+            <p className="text-xs text-muted-foreground">Discussions avec {role === "client" ? "vos prestataires" : "vos clients"}</p>
           </div>
           <ul>
             {convs.map((c) => (
@@ -99,8 +93,8 @@ function MessagesPage() {
                   onClick={() => setActiveId(c.id)}
                   className={`flex w-full items-start gap-3 border-b border-border p-4 text-left transition ${activeId === c.id ? "bg-gradient-brand-soft" : "hover:bg-secondary/50"}`}
                 >
-                  <div className={`grid h-10 w-10 shrink-0 place-items-center rounded-full text-xl ${c.isAI ? "bg-gradient-brand text-primary-foreground" : "bg-secondary"}`}>
-                    {c.isAI ? <Sparkles className="h-5 w-5" /> : c.avatar}
+                  <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-secondary text-xl">
+                    {c.avatar}
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center justify-between gap-2">
@@ -118,14 +112,10 @@ function MessagesPage() {
         {/* Chat */}
         <section className="flex min-h-0 flex-col">
           <div className="flex items-center gap-3 border-b border-border p-4">
-            <div className={`grid h-10 w-10 place-items-center rounded-full text-xl ${active.isAI ? "bg-gradient-brand text-primary-foreground" : "bg-secondary"}`}>
-              {active.isAI ? <Bot className="h-5 w-5" /> : active.avatar}
-            </div>
+            <div className="grid h-10 w-10 place-items-center rounded-full bg-secondary text-xl">{active.avatar}</div>
             <div>
               <div className="font-semibold">{active.name}</div>
-              <div className="text-xs text-muted-foreground">
-                {active.isAI ? "Assistant IA · Propulsé par Gemini" : "En ligne"}
-              </div>
+              <div className="text-xs text-muted-foreground">En ligne</div>
             </div>
           </div>
 
@@ -135,13 +125,8 @@ function MessagesPage() {
                 <div className={`max-w-[78%] rounded-2xl px-4 py-2 text-sm shadow-soft backdrop-blur-md ${
                   m.from === "me"
                     ? "rounded-br-sm bg-gradient-brand text-primary-foreground"
-                    : m.from === "ai"
-                    ? "rounded-bl-sm border border-primary/30 bg-white/60 dark:bg-black/50"
                     : "rounded-bl-sm border border-white/30 bg-white/60 dark:border-white/10 dark:bg-black/50"
                 }`}>
-                  {m.from === "ai" && (
-                    <div className="mb-1 flex items-center gap-1 text-xs font-semibold text-primary"><Sparkles className="h-3 w-3" /> Gemini</div>
-                  )}
                   <p className="whitespace-pre-wrap">{m.text}</p>
                   <div className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${m.from === "me" ? "opacity-80" : "text-muted-foreground"}`}>
                     {m.ts}
@@ -150,21 +135,11 @@ function MessagesPage() {
                 </div>
               </div>
             ))}
-            {aiTyping && (
-              <div className="flex justify-start">
-                <div className="flex items-center gap-1 rounded-2xl border border-primary/20 bg-card px-4 py-3 shadow-soft">
-                  <span className="h-2 w-2 animate-bounce rounded-full bg-primary [animation-delay:0ms]" />
-                  <span className="h-2 w-2 animate-bounce rounded-full bg-primary [animation-delay:120ms]" />
-                  <span className="h-2 w-2 animate-bounce rounded-full bg-primary [animation-delay:240ms]" />
-                </div>
-              </div>
-            )}
           </div>
 
-          {/* Smart replies (Pro only) */}
-          {role === "provider" && !active.isAI && (
+          {role === "provider" && (
             <div className="flex gap-2 overflow-x-auto border-t border-border bg-background/50 px-4 py-2">
-              <span className="flex shrink-0 items-center gap-1 rounded-full bg-gradient-brand-soft px-2 py-1 text-xs font-semibold text-primary"><Sparkles className="h-3 w-3" /> IA</span>
+              <span className="flex shrink-0 items-center gap-1 rounded-full bg-gradient-brand-soft px-2 py-1 text-xs font-semibold text-primary">Réponses rapides</span>
               {smartReplies.map((s) => (
                 <button key={s} onClick={() => send(s)} className="shrink-0 rounded-full border border-border bg-card px-3 py-1 text-xs hover:bg-secondary">
                   {s}
@@ -180,7 +155,7 @@ function MessagesPage() {
             <input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder={active.isAI ? "Demandez-moi n'importe quoi…" : "Écrire un message…"}
+              placeholder="Écrire un message…"
               className="flex-1 rounded-full border border-border bg-background px-4 py-2.5 text-sm outline-none focus:border-primary"
             />
             <button className="grid h-10 w-10 place-items-center rounded-full bg-gradient-brand text-primary-foreground shadow-brand">
@@ -191,19 +166,4 @@ function MessagesPage() {
       </div>
     </div>
   );
-}
-
-function mockAIReply(input: string, role: "client" | "provider") {
-  const i = input.toLowerCase();
-  if (role === "client") {
-    if (i.includes("coiff")) return "Excellent choix ! 💇🏾‍♀️ À Yaoundé, je recommande Salon Aminata (Bastos, 4.8★) pour les tresses et soins naturels. Voulez-vous que je vous propose des créneaux disponibles cette semaine ?";
-    if (i.includes("dent")) return "Pour un dentiste, le Cabinet Dr. Mbarga à Melen est très bien noté (4.9★, 87 avis). Consultations à partir de 10 000 FCFA. Souhaitez-vous prendre rendez-vous ?";
-    if (i.includes("rendez") || i.includes("rdv")) return "Voici un résumé de vos rendez-vous à venir :\n• 02/06 à 14h — Salon Aminata (Tresses)\n• 08/06 à 16h — Spa Zen (Massage)\n\nVoulez-vous en ajouter un autre ?";
-    return "Je peux vous aider à trouver un prestataire, comparer des prix, ou résumer vos rendez-vous. Quel service recherchez-vous ?";
-  } else {
-    if (i.includes("plann") || i.includes("optim")) return "📊 Analyse rapide : vos mardis matin sont à 35% d'occupation. Je suggère une promo -20% sur les soins ce créneau, ce qui pourrait générer ~45 000 FCFA supplémentaires/semaine. Voulez-vous l'activer ?";
-    if (i.includes("client") || i.includes("répondre")) return "Voici 3 réponses suggérées :\n1. \"Bonjour, votre rendez-vous est bien confirmé. À très bientôt !\"\n2. \"Merci de votre patience, je reviens vers vous dans la journée.\"\n3. \"Pourriez-vous me préciser la prestation souhaitée ?\"";
-    if (i.includes("revenu") || i.includes("ca")) return "💰 Votre CA du mois : 385 000 FCFA (+18% vs mois dernier). Top services : Tresses (45%), Coloration (30%). Bravo ! 🎉";
-    return "Je peux rédiger vos réponses clients, analyser vos revenus ou optimiser votre planning. Que voulez-vous faire ?";
-  }
 }
