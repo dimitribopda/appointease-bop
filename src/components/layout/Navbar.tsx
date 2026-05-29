@@ -91,6 +91,7 @@ export function Navbar() {
           active={isActive("/client/dashboard") || isActive("/pro/calendar") || isActive("/pro/dashboard")}
         />
         <TabLink to="/messages" label="Chat" icon={<MessageSquare className="h-5 w-5" />} active={isActive("/messages")} />
+        <TabLink to="/ai-assistant" label="BOP IA" icon={<Bot className="h-5 w-5" />} active={isActive("/ai-assistant")} />
         <TabLink to="/auth" label="Profil" icon={<User2 className="h-5 w-5" />} active={isActive("/auth")} />
       </nav>
     </header>
