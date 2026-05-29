@@ -27,6 +27,7 @@ export const NEIGHBORHOODS = ["Melen", "Bastos", "Mvan", "Akwa", "Bonapriso", "N
 export const PROVIDERS: Provider[] = [
   {
     id: "salon-aminata",
+    verified: true,
     name: "Salon Aminata",
     category: "coiffure",
     neighborhood: "Bastos",
@@ -44,6 +45,7 @@ export const PROVIDERS: Provider[] = [
   },
   {
     id: "dr-mbarga",
+    verified: true,
     name: "Cabinet Dr. Mbarga",
     category: "dentiste",
     neighborhood: "Melen",
@@ -78,6 +80,7 @@ export const PROVIDERS: Provider[] = [
   },
   {
     id: "spa-zen",
+    verified: true,
     name: "Spa Zen Bonapriso",
     category: "spa",
     neighborhood: "Bonapriso",
