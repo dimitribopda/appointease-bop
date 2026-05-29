@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { CATEGORIES, NEIGHBORHOODS, PROVIDERS, formatFCFA } from "@/lib/mock-data";
-import { MapPin, Star, SlidersHorizontal } from "lucide-react";
-import { useMemo, useState } from "react";
+import { MapPin, Star, SlidersHorizontal, BadgeCheck, SearchX } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ProviderRowSkeleton } from "@/components/ui/provider-card-skeleton";
+import { EmptyState } from "@/components/ui/empty-state";
 
 type SearchParams = { q?: string; hood?: string; cat?: string };
 
@@ -19,6 +21,11 @@ function SearchPage() {
   const { q, hood, cat } = Route.useSearch();
   const [cat2, setCat2] = useState(cat || "");
   const [hood2, setHood2] = useState(hood || "");
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 700);
+    return () => clearTimeout(t);
+  }, []);
   const [minRating, setMinRating] = useState(0);
   const [maxPrice, setMaxPrice] = useState(50000);
   const [query, setQuery] = useState(q || "");
@@ -88,23 +95,32 @@ function SearchPage() {
         {/* Results */}
         <div>
           <p className="mb-4 text-sm text-muted-foreground">
-            <span className="font-semibold text-foreground">{results.length}</span> prestataire(s) trouvé(s)
+            {loading ? "Chargement…" : (<><span className="font-semibold text-foreground">{results.length}</span> prestataire(s) trouvé(s)</>)}
           </p>
           <div className="space-y-4">
-            {results.map((p) => (
+            {loading && Array.from({ length: 4 }).map((_, i) => <ProviderRowSkeleton key={i} />)}
+            {!loading && results.map((p) => (
               <Link
                 key={p.id}
                 to="/provider/$id"
                 params={{ id: p.id }}
-                className="group flex flex-col gap-4 rounded-2xl border border-white/20 bg-white/40 p-4 backdrop-blur-md transition hover:-translate-y-0.5 hover:shadow-brand dark:border-white/10 dark:bg-black/40 sm:flex-row"
+                className="group flex flex-col gap-4 rounded-2xl border border-white/20 bg-white/40 p-4 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:scale-[1.01] hover:shadow-lg hover:shadow-brand dark:border-white/10 dark:bg-black/40 sm:flex-row"
               >
-                <div className="aspect-[4/3] w-full overflow-hidden rounded-xl bg-muted sm:h-32 sm:w-44 sm:shrink-0">
-                  <img src={p.image} alt={p.name} className="h-full w-full object-cover transition group-hover:scale-105" />
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl bg-muted sm:h-32 sm:w-44 sm:shrink-0">
+                  <img src={p.image} alt={p.name} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+                  {p.verified && (
+                    <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-white/80 px-2 py-0.5 text-[10px] font-semibold text-primary shadow-soft backdrop-blur dark:bg-black/70">
+                      <BadgeCheck className="h-3 w-3" /> Vérifié
+                    </span>
+                  )}
                 </div>
                 <div className="flex flex-1 flex-col">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h3 className="font-semibold">{p.name}</h3>
+                      <h3 className="flex items-center gap-1 font-semibold">
+                        {p.name}
+                        {p.verified && <BadgeCheck className="h-4 w-4 text-primary" />}
+                      </h3>
                       <p className="text-xs uppercase tracking-wide text-muted-foreground">
                         {CATEGORIES.find((c) => c.slug === p.category)?.label}
                       </p>
@@ -124,10 +140,14 @@ function SearchPage() {
                 </div>
               </Link>
             ))}
-            {results.length === 0 && (
-              <div className="rounded-2xl border border-dashed border-border bg-card p-12 text-center text-sm text-muted-foreground">
-                Aucun prestataire ne correspond à vos critères.
-              </div>
+            {!loading && results.length === 0 && (
+              <EmptyState
+                icon={<SearchX className="h-7 w-7" />}
+                title="Aucun résultat"
+                description="Essayez d'élargir votre recherche ou de modifier vos filtres."
+                ctaLabel="Réinitialiser les filtres"
+                onCta={() => { setCat2(""); setHood2(""); setMinRating(0); setMaxPrice(50000); setQuery(""); }}
+              />
             )}
           </div>
         </div>
@@ -135,6 +155,7 @@ function SearchPage() {
     </div>
   );
 }
+
 
 function FilterBlock({ title, children }: { title: string; children: React.ReactNode }) {
   return (

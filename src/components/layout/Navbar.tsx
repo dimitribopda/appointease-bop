@@ -77,47 +77,38 @@ export function Navbar() {
         </div>
       </div>
 
-      {/* Mobile nav */}
-      <div className="flex items-center gap-1 overflow-x-auto border-t border-border/60 px-3 py-2 md:hidden">
-        {role === "client" ? (
-          <>
-            <NavLink to="/" label="Accueil" active={location.pathname === "/"} />
-            <NavLink to="/search" label="Recherche" active={isActive("/search")} />
-            <NavLink to="/client/dashboard" label="Mes RDV" active={isActive("/client")} />
-          </>
-        ) : (
-          <>
-            <NavLink to="/pro/dashboard" label="Dashboard" active={isActive("/pro/dashboard")} />
-            <NavLink to="/pro/calendar" label="Agenda" active={isActive("/pro/calendar")} />
-            <NavLink to="/pro/services" label="Services" active={isActive("/pro/services")} />
-          </>
-        )}
-        <NavLink to="/messages" label="Messages" active={isActive("/messages")} />
-        <NavLink to="/pricing" label="Forfaits" active={isActive("/pricing")} />
-      </div>
-      {/* Barre de navigation mobile - Glassmorphism */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/60 dark:bg-black/60 backdrop-blur-lg border-t border-white/20 dark:border-white/10 flex justify-around items-center z-50 px-4 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
-        <Link to="/" className={`flex flex-col items-center justify-center gap-1 w-12 ${isActive("/") ? "text-purple-600 dark:text-purple-400 font-medium" : "text-gray-500 dark:text-gray-400"}`}>
-          <Home className="h-5 w-5" />
-          <span className="text-[10px]">Accueil</span>
-        </Link>
-        
-        <Link to={role === "client" ? "/client/dashboard" : "/pro/calendar"} className={`flex flex-col items-center justify-center gap-1 w-12 ${isActive("/client/dashboard") || isActive("/pro/calendar") ? "text-purple-600 dark:text-purple-400 font-medium" : "text-gray-500 dark:text-gray-400"}`}>
-          <Calendar className="h-5 w-5" />
-          <span className="text-[10px]">Agenda</span>
-        </Link>
-        
-        <Link to="/messages" className={`flex flex-col items-center justify-center gap-1 w-12 ${isActive("/messages") ? "text-purple-600 dark:text-purple-400 font-medium" : "text-gray-500 dark:text-gray-400"}`}>
-          <MessageSquare className="h-5 w-5" />
-          <span className="text-[10px]">Chat</span>
-        </Link>
-        
-        <Link to="/pricing" className={`flex flex-col items-center justify-center gap-1 w-12 ${isActive("/pricing") ? "text-purple-600 dark:text-purple-400 font-medium" : "text-gray-500 dark:text-gray-400"}`}>
-          <Sparkles className="h-5 w-5" />
-          <span className="text-[10px]">Forfaits</span>
-        </Link>
-      </div>
+      {/* Bottom tab bar mobile - Glassmorphism */}
+      <nav
+        aria-label="Navigation principale"
+        className="fixed bottom-0 left-0 right-0 z-50 flex h-16 items-center justify-around border-t border-white/20 bg-white/50 px-2 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] backdrop-blur-xl dark:border-white/10 dark:bg-black/50 md:hidden"
+      >
+        <TabLink to="/" label="Accueil" icon={<Home className="h-5 w-5" />} active={location.pathname === "/"} />
+        <TabLink
+          to={role === "client" ? "/client/dashboard" : "/pro/calendar"}
+          label="Agenda"
+          icon={<Calendar className="h-5 w-5" />}
+          active={isActive("/client/dashboard") || isActive("/pro/calendar") || isActive("/pro/dashboard")}
+        />
+        <TabLink to="/messages" label="Chat" icon={<MessageSquare className="h-5 w-5" />} active={isActive("/messages")} />
+        <TabLink to="/auth" label="Profil" icon={<User2 className="h-5 w-5" />} active={isActive("/auth")} />
+      </nav>
     </header>
+  );
+}
+
+function TabLink({ to, label, icon, active }: { to: string; label: string; icon: React.ReactNode; active: boolean }) {
+  return (
+    <Link
+      to={to}
+      className={`flex flex-1 flex-col items-center justify-center gap-0.5 rounded-xl py-1.5 text-[10px] font-medium transition ${
+        active ? "text-primary" : "text-muted-foreground hover:text-foreground"
+      }`}
+    >
+      <span className={`grid h-8 w-8 place-items-center rounded-lg transition ${active ? "bg-gradient-brand text-primary-foreground shadow-brand" : ""}`}>
+        {icon}
+      </span>
+      {label}
+    </Link>
   );
 }
 

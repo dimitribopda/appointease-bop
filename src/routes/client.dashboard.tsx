@@ -1,7 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PROVIDERS, formatFCFA } from "@/lib/mock-data";
-import { Calendar, Clock, MapPin, User2, Mail, Phone } from "lucide-react";
-import { useState } from "react";
+import { Calendar, Clock, MapPin, User2, Mail, Phone, CalendarPlus } from "lucide-react";
+import { useEffect, useState } from "react";
+import { AppointmentSkeleton } from "@/components/ui/provider-card-skeleton";
+import { EmptyState } from "@/components/ui/empty-state";
 
 export const Route = createFileRoute("/client/dashboard")({
   head: () => ({ meta: [{ title: "Mes rendez-vous — AppointEase" }] }),
@@ -19,6 +21,11 @@ const past = [
 
 function ClientDashboard() {
   const [tab, setTab] = useState<"upcoming" | "past" | "profile">("upcoming");
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 600);
+    return () => clearTimeout(t);
+  }, [tab]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
@@ -40,19 +47,30 @@ function ClientDashboard() {
         ))}
       </div>
 
-      {tab === "upcoming" && <AppointmentList items={upcoming} />}
-      {tab === "past" && <AppointmentList items={past} />}
+      {tab === "upcoming" && <AppointmentList items={upcoming} loading={loading} />}
+      {tab === "past" && <AppointmentList items={past} loading={loading} />}
       {tab === "profile" && <Profile />}
     </div>
   );
 }
 
-function AppointmentList({ items }: { items: typeof upcoming }) {
+function AppointmentList({ items, loading }: { items: typeof upcoming; loading?: boolean }) {
+  if (loading) {
+    return (
+      <div className="space-y-3">
+        {Array.from({ length: 3 }).map((_, i) => <AppointmentSkeleton key={i} />)}
+      </div>
+    );
+  }
   if (items.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-border bg-card p-12 text-center text-sm text-muted-foreground">
-        Aucun rendez-vous.
-      </div>
+      <EmptyState
+        icon={<CalendarPlus className="h-7 w-7" />}
+        title="Aucun rendez-vous pour l'instant"
+        description="Trouvez un pro près de chez vous et réservez votre prochain créneau en quelques secondes."
+        ctaLabel="Explorer les pros"
+        ctaTo="/search"
+      />
     );
   }
   return (
