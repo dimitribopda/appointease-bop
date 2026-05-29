@@ -1,8 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useRole } from "@/lib/role-context";
 import { useTheme } from "@/lib/theme-context";
-import { Calendar, MessageSquare, Sparkles, User2, Briefcase, Moon, Sun } from "lucide-react";
-
 export function Navbar() {
   const { role, setRole } = useRole();
   const { theme, toggle } = useTheme();
@@ -94,6 +92,28 @@ export function Navbar() {
         )}
         <NavLink to="/messages" label="Messages" active={isActive("/messages")} />
         <NavLink to="/pricing" label="Forfaits" active={isActive("/pricing")} />
+      </div>
+      {/* Barre de navigation mobile - Glassmorphism */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-white/60 dark:bg-black/60 backdrop-blur-lg border-t border-white/20 dark:border-white/10 flex justify-around items-center z-50 px-4 shadow-[0_-4px_12px_rgba(0,0,0,0.05)]">
+        <Link to="/" className={`flex flex-col items-center justify-center gap-1 w-12 ${isActive("/") ? "text-purple-600 dark:text-purple-400 font-medium" : "text-gray-500 dark:text-gray-400"}`}>
+          <Home className="h-5 w-5" />
+          <span className="text-[10px]">Accueil</span>
+        </Link>
+        
+        <Link to={role === "client" ? "/client/dashboard" : "/pro/calendar"} className={`flex flex-col items-center justify-center gap-1 w-12 ${isActive("/client/dashboard") || isActive("/pro/calendar") ? "text-purple-600 dark:text-purple-400 font-medium" : "text-gray-500 dark:text-gray-400"}`}>
+          <Calendar className="h-5 w-5" />
+          <span className="text-[10px]">Agenda</span>
+        </Link>
+        
+        <Link to="/messages" className={`flex flex-col items-center justify-center gap-1 w-12 ${isActive("/messages") ? "text-purple-600 dark:text-purple-400 font-medium" : "text-gray-500 dark:text-gray-400"}`}>
+          <MessageSquare className="h-5 w-5" />
+          <span className="text-[10px]">Chat</span>
+        </Link>
+        
+        <Link to="/pricing" className={`flex flex-col items-center justify-center gap-1 w-12 ${isActive("/pricing") ? "text-purple-600 dark:text-purple-400 font-medium" : "text-gray-500 dark:text-gray-400"}`}>
+          <Sparkles className="h-5 w-5" />
+          <span className="text-[10px]">Forfaits</span>
+        </Link>
       </div>
     </header>
   );
