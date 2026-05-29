@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { CATEGORIES, NEIGHBORHOODS, PROVIDERS, formatFCFA } from "@/lib/mock-data";
-import { Search, MapPin, Star, ArrowRight, Sparkles, ShieldCheck, Smartphone } from "lucide-react";
+import { Search, MapPin, Star, ArrowRight, Sparkles, ShieldCheck, Smartphone, BadgeCheck } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/")({
@@ -129,14 +129,22 @@ function Home() {
               key={p.id}
               to="/provider/$id"
               params={{ id: p.id }}
-              className="group overflow-hidden rounded-2xl border border-white/20 bg-white/40 backdrop-blur-md transition hover:-translate-y-0.5 hover:shadow-brand dark:border-white/10 dark:bg-black/40"
+              className="group overflow-hidden rounded-2xl border border-white/20 bg-white/40 backdrop-blur-md transition duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-lg hover:shadow-brand dark:border-white/10 dark:bg-black/40"
             >
-              <div className="aspect-[4/3] overflow-hidden bg-muted">
-                <img src={p.image} alt={p.name} className="h-full w-full object-cover transition group-hover:scale-105" />
+              <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+                <img src={p.image} alt={p.name} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+                {p.verified && (
+                  <span className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-white/80 px-2 py-0.5 text-[10px] font-semibold text-primary shadow-soft backdrop-blur dark:bg-black/70">
+                    <BadgeCheck className="h-3 w-3" /> Vérifié
+                  </span>
+                )}
               </div>
               <div className="p-4">
                 <div className="flex items-start justify-between gap-2">
-                  <h3 className="font-semibold">{p.name}</h3>
+                  <h3 className="flex items-center gap-1 font-semibold">
+                    {p.name}
+                    {p.verified && <BadgeCheck className="h-4 w-4 text-primary" />}
+                  </h3>
                   <span className="flex items-center gap-1 text-xs font-semibold">
                     <Star className="h-3.5 w-3.5 fill-brand-orange text-brand-orange" />
                     {p.rating}
