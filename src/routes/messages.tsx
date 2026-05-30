@@ -87,6 +87,24 @@ function MessagesPage() {
             <p className="text-xs text-muted-foreground">Discussions avec {role === "client" ? "vos prestataires" : "vos clients"}</p>
           </div>
           <ul>
+            {/* Contact IA permanent — épinglé en tête de liste */}
+            <li>
+              <Link
+                to="/ai-assistant"
+                className="flex w-full items-start gap-3 border-b border-border p-4 text-left transition hover:bg-gradient-to-r hover:from-[#6B2D8E]/10 hover:to-[#F5A623]/10"
+              >
+                <div className="relative grid h-10 w-10 shrink-0 place-items-center rounded-full p-[2px]" style={{ background: "conic-gradient(from 180deg, #6B2D8E, #9333EA, #F5A623, #6B2D8E)" }}>
+                  <div className="grid h-full w-full place-items-center rounded-full bg-[#0b0b1a] text-[10px] font-black text-white">BOP</div>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="truncate text-sm font-bold uppercase tracking-wide">APPOINTEASE AI by BOP</span>
+                    <span className="rounded-full bg-gradient-to-r from-[#6B2D8E] to-[#F5A623] px-1.5 text-[10px] font-bold text-white">IA</span>
+                  </div>
+                  <p className="truncate text-xs text-muted-foreground">Votre assistant intelligent · Toujours en ligne</p>
+                </div>
+              </Link>
+            </li>
             {convs.map((c) => (
               <li key={c.id}>
                 <button
