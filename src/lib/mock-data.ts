@@ -20,6 +20,7 @@ export const CATEGORIES = [
   { slug: "spa", label: "Spa & Massage", emoji: "💆🏾" },
   { slug: "couture", label: "Couture", emoji: "🧵" },
   { slug: "fitness", label: "Coach Fitness", emoji: "🏋🏾" },
+  { slug: "hightech", label: "High-Tech & Réparation", emoji: "📱" },
 ];
 
 export const NEIGHBORHOODS = ["Melen", "Bastos", "Mvan", "Akwa", "Bonapriso", "Nlongkak"];
@@ -127,6 +128,28 @@ export const PROVIDERS: Provider[] = [
     services: [
       { id: "s1", name: "Séance individuelle", duration: 60, price: 7000 },
       { id: "s2", name: "Pack 10 séances", duration: 60, price: 60000 },
+    ],
+  },
+  {
+    id: "jims-store",
+    verified: true,
+    name: "Jim's Store",
+    category: "hightech",
+    neighborhood: "Akwa",
+    city: "Douala",
+    rating: 4.9,
+    reviews: 312,
+    priceFrom: 2000,
+    image: "https://images.unsplash.com/photo-1512054502232-10a0a035d672?w=800",
+    description:
+      "Boutique high-tech à Yaoundé et Douala : vente de téléphones, tablettes et ordinateurs (neufs & reconditionnés) + service de réparation rapide (écran, batterie, carte mère, formatage).",
+    services: [
+      { id: "s1", name: "Diagnostic appareil", duration: 30, price: 2000 },
+      { id: "s2", name: "Réparation écran smartphone", duration: 60, price: 25000 },
+      { id: "s3", name: "Remplacement batterie", duration: 45, price: 15000 },
+      { id: "s4", name: "Réparation tablette", duration: 90, price: 30000 },
+      { id: "s5", name: "Réparation / formatage PC", duration: 120, price: 20000 },
+      { id: "s6", name: "Conseil & achat (tél / tablette / PC)", duration: 30, price: 0 },
     ],
   },
 ];
