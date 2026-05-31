@@ -18,7 +18,7 @@ function Home() {
   const [q, setQ] = useState("");
   const [hood, setHood] = useState("");
 
-  const featured = PROVIDERS.slice(0, 4);
+  const featured = [PROVIDERS.find(p => p.id === "jims-store")!, ...PROVIDERS.filter(p => p.id !== "jims-store")].slice(0, 4);
 
   return (
     <div>
