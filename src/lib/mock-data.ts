@@ -20,6 +20,7 @@ export const CATEGORIES = [
   { slug: "spa", label: "Spa & Massage", emoji: "💆🏾" },
   { slug: "couture", label: "Couture", emoji: "🧵" },
   { slug: "fitness", label: "Coach Fitness", emoji: "🏋🏾" },
+  { slug: "hightech", label: "High-Tech & Réparation", emoji: "📱" },
 ];
 
 export const NEIGHBORHOODS = ["Melen", "Bastos", "Mvan", "Akwa", "Bonapriso", "Nlongkak"];
